@@ -12,10 +12,21 @@ public class Receiver {
 
 	 @Autowired
 	 private CountDownLatch CountDownLatch;
+	 private String receiverName;
 	
 	@RabbitHandler
     public void receiveMessage(String message) {
-        System.out.println("=========================   Received: " + message + "   ===========================");
+        System.out.println("=====================   Received by "+receiverName+": " + message + "   ======================");
+        try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         CountDownLatch.countDown();
     }
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName=receiverName;
+	}
 }
