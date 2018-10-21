@@ -1,0 +1,3 @@
+## spring-rabbitmq-v4 ##
+
+Single Producer sending multiple messages to one exchange and that exchange is forwarding that message to multiple queues. We have to create multiple bindings between queue and exchange. Binding is nothing but the mapping between exchange and queue The no of bindings is equal to or greater than no of queues. The exchange type here we used is fanout exchange, means exchange will send the messages only through those bindings whos routing key is matching. This routing key we define while creating bindings.Here single consumers listening on different queue receives messages. ** One thing we must remember here is when exchange is created with perticular type (fanout,direct etc..) we cannot use the same exchange with outher type.**

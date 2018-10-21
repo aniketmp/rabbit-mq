@@ -3,6 +3,7 @@ package org.aniket;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,7 +20,7 @@ public class Sender implements CommandLineRunner{
     private RabbitTemplate rabbitTemplate;
     
     @Autowired
-    private FanoutExchange exchange;
+    private DirectExchange exchange;
      
     @Autowired
     private CountDownLatch countDownLatch;
@@ -35,7 +36,15 @@ public class Sender implements CommandLineRunner{
 		 System.out.println("=================================   Sending message   ==================================");	
 		  for(int i=0;i<noOfMsg;i++)
 		  {
-			  rabbitTemplate.convertAndSend(exchange.getName(),"",message+":"+i); //Routing key is empty "".Because fanout exchange ignores routing key
+			  //If the no. is even then use even routing key , else use odd routing key.
+			  if(i%2==0)
+			  {
+				  rabbitTemplate.convertAndSend(exchange.getName(),"even",message+":"+i);  
+			  }
+			  else
+			  {				  
+				  rabbitTemplate.convertAndSend(exchange.getName(),"odd",message+":"+i); 
+			  }
 		  }		
 	      countDownLatch.await();
 	}
